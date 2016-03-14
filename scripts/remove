@@ -10,3 +10,5 @@ sudo sed -i "s/^asix$/# asix/g" /etc/modules
 
 # DHCP
 sudo rm /etc/dnsmasq.d/${app}
+
+sudo rm /usr/local/bin/ynh-routing

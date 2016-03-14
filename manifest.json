@@ -6,6 +6,7 @@
         "fr": "Routing et drivers"
     },
     "license": "GPLv2",
+    "url": "https://github.com/geekariom/routing_ynh",
     "multi_instance": "false",
     "arguments": {
         "install": [

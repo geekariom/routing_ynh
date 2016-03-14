@@ -12,13 +12,16 @@ dhcp_enable=$3
 echo "Install headers"
 sudo apt-get update
 sudo apt-get dist-upgrade -y
-sudo apt-get install linux-headers-`uname -r`
+sudo apt-get --assume-yes --force-yes install linux-headers-`uname -r`
 
 # Compile driver
 if [ $dhcp_enable ]; then
+    echo "Compile drivers"
     cd ../sources/drivers
     make
     sudo make install
     sudo modprobe asix
     echo "asix" >> /etc/modules
 fi
+
+# Configure

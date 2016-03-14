@@ -25,7 +25,7 @@
                     "en": "Network",
                     "fr": "Réseau"
                 },
-                "example": "192.168.5.0"
+                "example": "192.168.5.0",
                 "default": "192.168.5.0"
             },
             {

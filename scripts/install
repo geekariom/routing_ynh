@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+app=routing_eth
+
+# Retrieve arguments
+compile=$1
+mask=$2
+dhcp_enable=$3
+
+echo "Install headers"
+sudo apt-get update
+sudo apt-get dist-upgrade -y
+sudo apt-get install linux-headers-`uname -r`
+
+# Compile driver
+if [ $dhcp_enable ]; then
+    cd ../sources/drivers
+    make
+    sudo make install
+    sudo modprobe asix
+    echo "asix" >> /etc/modules
+fi

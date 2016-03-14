@@ -1,0 +1,43 @@
+{
+    "name": "Routing / drivers",
+    "id": "routing_eth",
+    "description": {
+        "en": "Routing and drivers",
+        "fr": "Routing et drivers"
+    },
+    "license": "GPLv2",
+    "multi_instance": "false",
+    "arguments": {
+        "install": [
+            {
+                "name": "compile",
+                "type": "boolean",
+                "ask": {
+                    "en": "Compile drivers",
+                    "fr": "Compiler les drivers"
+                },
+                "optional": "true",
+                "default": "true"
+            },
+            {
+                "name": "mask",
+                "ask": {
+                    "en": "Network",
+                    "fr": "Réseau"
+                },
+                "example": "192.168.5.0"
+                "default": "192.168.5.0"
+            },
+            {
+                "name": "dhcp",
+                "type": "boolean",
+                "ask": {
+                    "en": "Enable DHCP",
+                    "fr": "Activer le DHCP"
+                },
+                "optional": "true",
+                "default": "true"
+            }
+        ]
+    }
+}

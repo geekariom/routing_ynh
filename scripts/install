@@ -52,3 +52,10 @@ if [ $dhcp_enable ]; then
     sudo systemctl restart dnsmasq
 fi
 
+if [ ! -f /sbin/iptables ]; then
+    sudo apt-get --assume-yes --force-yes install iptables
+fi
+
+sudo install -o root -g root -m 0755 ../conf/iptables.tpl /usr/local/bin/ynh-routing
+sudo sed "s|@NETWORK@|${network}/24|g" -i /usr/local/bin/ynh-routing
+sudo ynh-routing

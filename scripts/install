@@ -48,7 +48,7 @@ if [ $dhcp_enable ]; then
     fi
     echo "Configure DHCP server"
     sudo cp ../conf/dhcpv4.tpl /etc/dnsmasq.d/${app}
-    sudo sed "s|@PREFIX@|${prefix}|g" /etc/dnsmasq.d/${app}
+    sudo sed "s|@PREFIX@|${prefix_ip}|g" -i /etc/dnsmasq.d/${app}
     sudo systemctl restart dnsmasq
 fi
 

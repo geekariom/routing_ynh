@@ -1,9 +1,22 @@
 #!/bin/bash
 
-# Rules LAN <=> NET
-iptables -I FORWARD -i eth1 -o eth0 -s @NETWORK@ -m conntrack --ctstate NEW -j ACCEPT
-iptables -t nat -I POSTROUTING -o eth0 -s @NETWORK@ -j MASQUERADE
+network="@NETWORK@"
+net="eth0"
+lan="eth1"
+vpn="tun0"
 
-# Rules LAN <=> VPN
-iptables -I FORWARD -i eth1 -o tun0 -s @NETWORK@ -m conntrack --ctstate NEW -j ACCEPT
-iptables -t nat -I POSTROUTING -o tun0 -s @NETWORK@ -j MASQUERADE
+case "$1" in
+    start)
+        iptables -I FORWARD -i ${lan} -o ${net} -s ${network} -m conntrack --ctstate NEW -j ACCEPT
+        iptables -t nat -I POSTROUTING -o ${net} -s ${network} -j MASQUERADE
+        iptables -I FORWARD -i ${lan} -o ${vpn} -s ${network} -m conntrack --ctstate NEW -j ACCEPT
+        iptables -t nat -I POSTROUTING -o ${vpn} -s ${network} -j MASQUERADE
+    ;;
+
+    stop)
+        iptables -D FORWARD -i ${lan} -o ${net} -s ${network} -m conntrack --ctstate NEW -j ACCEPT
+        iptables -t nat -I POSTROUTING -o ${net} -s ${network} -j MASQUERADE
+        iptables -I FORWARD -i ${lan} -o ${vpn} -s ${network} -m conntrack --ctstate NEW -j ACCEPT
+        iptables -t nat -I POSTROUTING -o ${vpn} -s ${network} -j MASQUERADE
+    ;;
+esac

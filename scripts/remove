@@ -11,4 +11,10 @@ sudo sed -i "s/^asix$/# asix/g" /etc/modules
 # DHCP
 sudo rm /etc/dnsmasq.d/${app}
 
+# Services
+sudo systemctl stop ynh-routing
+sudo systemctl disable ynh-routing
+sudo rm /etc/systemd/system/ynh-routing.service
 sudo rm /usr/local/bin/ynh-routing
+
+exit 0

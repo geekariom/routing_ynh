@@ -58,4 +58,9 @@ fi
 
 sudo install -o root -g root -m 0755 ../conf/iptables.tpl /usr/local/bin/ynh-routing
 sudo sed "s|@NETWORK@|${network}/24|g" -i /usr/local/bin/ynh-routing
-sudo ynh-routing
+
+sudo install -o root -g root -m 0644 ../conf/ynh-routing.service /etc/systemd/system/
+sudo systemctl enable ynh-routing
+sudo systemctl start ynh-routing
+
+exit 0

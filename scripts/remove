@@ -2,5 +2,11 @@
 
 set -e
 
-rmmod asix
-sed -i "s/^asix$/# asix/g" /etc/modules
+app=routing_eth
+
+# Remove driver
+sudo rmmod asix
+sudo sed -i "s/^asix$/# asix/g" /etc/modules
+
+# DHCP
+sudo rm /etc/dnsmasq.d/${app}

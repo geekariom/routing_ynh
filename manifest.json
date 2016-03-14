@@ -20,7 +20,7 @@
                 "default": "true"
             },
             {
-                "name": "mask",
+                "name": "network",
                 "ask": {
                     "en": "Network",
                     "fr": "Réseau"

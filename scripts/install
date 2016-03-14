@@ -3,25 +3,52 @@
 set -e
 
 app=routing_eth
+dir=
 
 # Retrieve arguments
 compile=$1
-mask=$2
+network=$2
 dhcp_enable=$3
 
-echo "Install headers"
-sudo apt-get update
-sudo apt-get dist-upgrade -y
-sudo apt-get --assume-yes --force-yes install linux-headers-`uname -r`
+# Check network
+if [ ${network: -2} != '.0' ]; then
+    echo "Invalid network !"
+    exit 1
+fi
+prefix_ip=${network::-2}
 
 # Compile driver
-if [ $dhcp_enable ]; then
-    echo "Compile drivers"
-    cd ../sources/drivers
-    make
-    sudo make install
+if [ $(lsmod | grep ^asix | wc -l) == "0" ]; then
+    echo "Install headers"
+    sudo apt-get update
+    sudo apt-get dist-upgrade -y
+    sudo apt-get --assume-yes --force-yes install linux-headers-`uname -r`
+
+    echo "Compile driver"
+    make -C ../sources/drivers
+    echo "Install driver"
+    sudo make -C ../sources/drivers install
     sudo modprobe asix
-    echo "asix" >> /etc/modules
+    sudo echo "asix" >> /etc/modules
 fi
 
-# Configure
+
+# Set IP
+ip=${prefix_ip}.1
+echo "Set ip : ${ip}"
+sudo ifconfig eth1 down
+sudo ifconfig eth1 netmask 255.255.255.0 ${ip}
+sudo ifconfig eth1 up
+
+# DHCP server
+if [ $dhcp_enable ]; then
+    if [ ! -f /usr/sbin/dnsmasq ]; then
+        echo "Install dnsmasq"
+        sudo apt-get --assume-yes --force-yes install dnsmasq
+    fi
+    echo "Configure DHCP server"
+    sudo cp ../conf/dhcpv4.tpl /etc/dnsmasq.d/${app}
+    sudo sed "s|@PREFIX@|${prefix}|g" /etc/dnsmasq.d/${app}
+    sudo systemctl restart dnsmasq
+fi
+
